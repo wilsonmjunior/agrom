@@ -12,7 +12,7 @@ export default function InitialHomeScreen() {
           height={280}
           style={styles.illustration}
         />
-        <Text style={styles.title}>Bem vindo ao time{'\n'}da AGROM</Text>
+        <Text style={styles.title}>Bem vindo ao time{'\n'} AGROM</Text>
         <Text style={styles.subtitle}>
           Sua nova forma de negociar commodities com praticidade, segurança e agilidade.
         </Text>

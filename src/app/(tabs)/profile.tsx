@@ -1,8 +1,8 @@
 import { StyleSheet, View, Text, Image, FlatList, Dimensions } from 'react-native';
 import { ChevronRight } from 'lucide-react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { RectButton } from 'react-native-gesture-handler';
-import { useUnistyles } from 'react-native-unistyles';
+import { RectButton, ScrollView } from 'react-native-gesture-handler';
+import { Fragment, useReducer } from 'react';
 
 interface MenuItem {
   title: string;
@@ -21,10 +21,25 @@ const menuItems: MenuItem[] = [
 
 const { width } = Dimensions.get('window'); 
 
-export default function ProfileScreen() {
-  const ss = useUnistyles();
+const INITIAL_STATE = {
+  name: '', 
+  email: '', 
+  phone: '',
+};
 
-  console.warn('color: ',ss.theme.colors.primary)
+type State = typeof INITIAL_STATE;
+
+type Action = { type: 'INCREMENT' } | { type: 'SET_DATA'; payload: Partial<State> };
+
+export default function ProfileScreen() {
+  const [state, dispatch] = useReducer((state: State, action: Action) => {
+    switch(action.type) {
+      case 'INCREMENT': return { name: '', email: '', phone: '' };
+      default: return state;
+    }
+  }, INITIAL_STATE);
+
+  // dispatch({ type: 'INCREMENT' })
 
   const renderItem = ({ item, index }: { item: MenuItem; index: number }) => (
     <RectButton 
@@ -47,19 +62,23 @@ export default function ProfileScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.content}>
+      <ScrollView contentContainerStyle={styles.content}>
         <Image
           source={{ uri: 'https://avatars.githubusercontent.com/wilsonmjunior' }} 
           style={styles.avatar}
         />
 
-        <FlatList
-          data={menuItems}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.title}
-          contentContainerStyle={{ paddingBottom: 20 }}
-        />
-      </View>
+        <View style={styles.menu}>
+          {
+            menuItems.map((item, index) => (
+              <Fragment key={index}>
+                {renderItem({ item, index })}
+              </Fragment>
+            ))
+          }
+        </View>
+
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -71,14 +90,18 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    justifyContent: 'center',
+    // justifyContent: 'center',
     alignItems: 'center',
   },
   avatar: {
     width: 120,
     height: 120,
     borderRadius: 60,
-    marginBottom: 20,
+    marginTop: 20,
+    // marginBottom: 20,
+  },
+  menu: {
+    marginTop: 40,
   },
   menuContent: {
     flexDirection: 'row',

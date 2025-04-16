@@ -1,4 +1,3 @@
-import { StyleSheet } from 'react-native-unistyles';
 import defaultTheme from './defaultTheme';
 
 const lightTheme = {
@@ -39,10 +38,10 @@ declare module 'react-native-unistyles' {
   export interface UnistylesBreakpoints extends AppBreakpoints {}
 }
 
-StyleSheet.configure({
+export const configure = {
   settings: {
-    initialTheme: 'default',
+    initialTheme: () => 'default', // Change this line
   },
   breakpoints,
   themes: appThemes
-})
+} as any;
